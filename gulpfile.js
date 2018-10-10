@@ -32,6 +32,17 @@ gulp.task('clean', function(done) {
 	done()
 })
 
+gulp.task('env:copy', function(done) {
+	gulp.src('src/env/**/*.js')
+		.pipe(uglify())
+		.pipe(rename(function (path) {
+			path.dirname = 'env';
+		}))
+		.pipe(gulp.dest('./dist'))
+		.on('end', function() {
+			done()
+		});
+})
 gulp.task('build:extract', function(done) {
 	var scriptsPath = 'src/module'
 	var files = getFiles(scriptsPath);
@@ -118,7 +129,7 @@ gulp.task('build:extract', function(done) {
 	})
 })
 
-gulp.task('build', gulp.series('clean', 'build:extract'))
+gulp.task('build', gulp.series('clean', 'env:copy', 'build:extract'))
 
 
 
