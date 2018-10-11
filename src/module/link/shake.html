@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" name="viewport" />
+    <meta name="wk-title" content="Shake">
+    <meta name="wk-description" content="Welike shake">
+    <meta name="wk-icon" content="">
+    <meta name="wk-sharelink" content="">
+    <title>Shake</title>
+    <link rel="stylesheet" href="test.css">
+    <!--startcss-->
+    <link rel="stylesheet" href="shakelib.css">
+    <!--endcss-->
+
+    <script src="//zepto.js/zepto.min.js"></script>
+    <script>
+        // rem adaption
+        (function (doc, win) {
+            var docEl = doc.documentElement,
+                resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+                recalc = function () {
+                    // recalc 的策略需要和UI制定
+                    console.log(docEl.clientWidth)
+                    var clientWidth = docEl.clientWidth > 750 ? 750 : docEl.clientWidth;
+                    if (!clientWidth) return;
+                    docEl.style.fontSize = (clientWidth / 23.4735) + 'px';
+                };
+
+            if (!doc.addEventListener)
+                return;
+
+            win.addEventListener(resizeEvt, recalc, false);
+            if (doc.readyState === "complete") {
+                recalc()
+            } else {
+                doc.addEventListener('DOMContentLoaded', recalc, false);
+            }
+        })(document, window);
+    </script>
+</head>
+<body>
+    <!--media-->
+    <audio preload id="matched-voice" style="display: none;" src="./audio/audiosa.mp3"></audio>
+    <audio preload id="shaking-voice" style="display: none;" src="./audio/shaking.mp3"></audio>
+
+    <div id="v-screen">
+        <!--FINISH: add bar in html-->
+        <div id="v-nav">
+            <div class="nav-left">
+                <div id="history-back">back</div>
+                <div id="browser-close">close</div>
+            </div>
+            <div class="nav-right">
+                <div id="browser-share">share</div>
+            </div>
+        </div>
+        <div id="wrap" class="wrap">
+
+            <div id="usage-desc" style="display: none;" class="usage-desc">
+                <div class="desc-top">
+                    <div class="shake-hand">
+                        <img src="img/shake_hand.png">
+                    </div>
+                    <!--<img  class="cloud" src="img/cloud_back.png">-->
+
+                </div>
+                <div class="cloud">
+                    <img class="show" src="img/cloud_back.png">
+                </div>
+                <div class="desc-content">
+                    <div class="note">Note</div>
+                    <div class="desc1">Shake your mobile, and find friends who have same interest with you.</div>
+                    <div class="desc2">Be careful to protect your personal information. If you feel you are disturbed, please block the user immediately.</div>
+                </div>
+                <div class="desc-func">
+                    <div class="opt" id="note_read" style="font-weight: bold">OK</div>
+                </div>
+            </div>
+            <div id="operation" class="operation">
+                <div class="options">
+                    <div class="left">
+                        <div id="opt-force-close" class="opt"  style="margin-left: .9375rem;">
+                            <img src="./img/nav_close.png" style="height: 1.0625rem; width: 1.0625rem;">
+                        </div>
+                    </div>
+                    <div class="right">
+                        <div class="opt" style="display: none;">
+                            <div class="message">99</div>
+                            <img src="./img/msg.png">
+                        </div>
+                        <div class="opt" id="can-matched" style="margin-right: .9375rem; margin-left: .8125rem;">
+                            <img class="voice" src="img/open_person.png">
+                            <img class="unvoice" src="img/close_person.png">
+                        </div>
+                    </div>
+                    <div id="test-content" style="display: none;"></div>
+                </div>
+                <div class="middle" style="height: 20rem; margin-top:-4rem;">
+                    <!--<div class="image" style="background-image: url('./img/shake_back.png');">-->
+                    <!--<img src="./img/shake_face.png" id="phone-shake-img" style="width: 16rem; height: 12rem; bottom: 0; position: absolute;">-->
+                    <!--</div>-->
+
+                    <div id="shake-round" class="round">
+                        <div class="title-pic">
+                            <img src="img/title-pic.png" style="width: 10.6rem;">
+                            <img src="img/beta.png" style="position: absolute; width: 2.25rem; height: .9rem; right: calc(50% - 7.85rem); bottom: .15rem;">
+                        </div>
+                        <div class="circle round-1"></div>
+                        <div class="circle round-2"></div>
+                        <div class="circle round-3"></div>
+                        <div class="shaking-img">
+                            <img src="./img/shake_phone.png" id="phone-shake-img" class="rotating">
+                            <div id="shaking-hint" style="display: none;" class="shaking-hint">Click to Shake</div>
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="bottom">
+                    <div id="hint-content" style="display: none" class="hint"></div>
+                    <div class="shake-history-container">
+                        <div id="shake-history" style="display: none;">
+                        </div>
+                    </div>
+                    <div class="special-pronounce">
+                        Unlimited shakes during beta mode.
+                    </div>
+                </div>
+            </div>
+            <!--   style="display: none;"  -->
+            <div id="matched-person"  style="display: none;" class="matched-person">
+                <div class="info">
+                    <div class="avatar" id="person-avatar">
+
+                        <div id="matched-avatar-click-hint">
+                            <div class="avatar-click-hint">Click to view profile</div>
+                        </div>
+                        <div id="avatar-follow">
+                            <div id="follow-text"><img style="height: .75rem;width: .75rem; margin-right:.35rem;" src="img/follow-plus.png">Follow</div>
+                            <div id="follow-loading" class="loading-img rotating" style="display: none;"></div>
+                        </div>
+                    </div>
+                    <div class="detail">
+                        <div class="wrap-name g-women" id="person-nickname-wrap">
+                            <div class="content" id="person-nickname" style="font-weight: bold">Jim</div>
+                        </div>
+                        <div class="description" id="person-description">Like to call friends</div>
+                        <div class="labels" id="labels">
+                            <!--<div class="label" id="label1">abc</div>-->
+                        </div>
+                    </div>
+
+                    <div class="app-func">
+                        <div id="say-hi-btn">
+                            <div>Send Message</div>
+                        </div>
+                    </div>
+                </div>
+                <img class="close" id="matched-person-close" src="img/close.png">
+            </div>
+            <div id="outweb-layer" style="display: none;">
+                <div style="position: relative; width: 100%;">
+                    <div style="width: 100%; padding: 0 1rem; box-sizing: border-box; position: absolute;top: -6.5rem;text-align: center; font-size: 1.6rem">Engaging with him/her through posts at first, is a good way to start.</div>
+                </div>
+                <div class="back-btn">
+                    <div id="outapp-continue-btn">Got it</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--startjs-->
+    <script src="shakelib.js"></script>
+    <!--endjs-->
+</body>
+</html>
